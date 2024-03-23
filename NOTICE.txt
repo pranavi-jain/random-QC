@@ -1,0 +1,7 @@
+NOTICES AND INFORMATION
+Copyright (C) IBM 2017
+
+This repository includes code developed for Qiskit (https://www.ibm.com/quantum/qiskit).
+
+The customized 'get_random_circuit' function in random-QC/random_circuit.py 
+contains code originally written for Qiskit (https://github.com/Qiskit/qiskit/blob/stable/0.16/qiskit/circuit/random/utils.py)
