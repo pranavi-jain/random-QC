@@ -1,5 +1,6 @@
 from qiskit.circuit import QuantumCircuit
 from qiskit.quantum_info.analysis import hellinger_fidelity
+from measure_circuit import get_random_basis_list, get_meas_output
 
 
 def get_fidelity_data(meas1, meas2, noisyMeas):
@@ -69,3 +70,12 @@ def modify_circuit(qbits, gate, depth, circuit):
         ci_pos += 1
     newCirc.data = circuit[:ci_pos] + insertCirc.data + circuit[ci_pos:]
     return newCirc
+
+
+def get_measurement(circuit, runs, backend):
+    """Utility function to get measurement outcomes for a circuit measured in random basis
+    """
+    num_q = circuit.num_qubits
+    basis_list = get_random_basis_list(runs, num_q)
+    meas = get_meas_output(circuit, backend, basis_list)
+    return meas
