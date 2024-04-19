@@ -2,6 +2,7 @@ import numpy as np
 
 
 def _calculate_entropy(counts):
+    num_q = len(list(counts.keys())[0])
     total_shots = sum(counts.values())
     probabilities = [count / total_shots for count in counts.values()]
 
@@ -9,7 +10,7 @@ def _calculate_entropy(counts):
     entropy = -sum(
         p * np.log2(p) if p > 0 else 0 for p in probabilities
     )  # Avoid log(0) by conditioning
-    entropy /= np.log2(total_shots)  # Normalization
+    entropy /= num_q  # Normalization
     return entropy
 
 
