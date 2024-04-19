@@ -12,6 +12,9 @@ def get_fidelity_data(meas1, meas2, noisyMeas):
         meas1: measurement output of random circuit
         meas2: a second measurement output of random circuit
         noisyMeas: measurement output of noisy circuit
+        meas1: measurement output of random circuit
+        meas2: a second measurement output of random circuit
+        noisyMeas: measurement output of noisy circuit
 
     Returns:
         tuple: {{"C2C":fidelity of circuit},{"C2N":fidelity of circuit with noise}}
