@@ -69,6 +69,5 @@ def modify_circuit(qbits, gate, depth, circuit):
         if qpos == depth:
             break
         ci_pos += 1
-
     newCirc.data = circuit[:ci_pos] + insertCirc.data + circuit[ci_pos:]
     return newCirc
