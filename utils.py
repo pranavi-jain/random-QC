@@ -2,10 +2,8 @@ from qiskit.circuit import QuantumCircuit
 from qiskit.quantum_info.analysis import hellinger_fidelity
 
 
-def get_matched_fidelity(op1, op2, basis):
-    res1 = op1.get(basis)
-    res2 = op2.get(basis)
-    fidelity = hellinger_fidelity(res1, res2)
+def get_matched_fidelity(op1, op2):
+    fidelity = hellinger_fidelity(op1, op2)
     return fidelity
 
 
@@ -16,9 +14,9 @@ def get_fidelity_data(meas1, meas2, noisyMeas):
         for a single measurement set performed in all 3 basis.
 
     Args:
-        meas1 (_type_): _description_
-        meas2 (_type_): _description_
-        noisyMeas (_type_): _description_
+        meas1: measurement output of random circuit
+        meas2: a second measurement output of random circuit
+        noisyMeas: measurement output of noisy circuit
 
     Returns:
         tuple: {{"C2C":fidelity of circuit},{"C2N":fidelity of circuit with noise}}
@@ -31,11 +29,10 @@ def get_fidelity_data(meas1, meas2, noisyMeas):
     runs = len(meas1)
 
     for i in range(0, runs):
-        for b in ("X", "Y", "Z"):
-            sumC += get_matched_fidelity(meas1[i], meas2[i], b)
-            fidCC.append(sumC)
-            sumN += get_matched_fidelity(meas1[i], noisyMeas[i], b)
-            fidCN.append(sumN)
+        sumC += get_matched_fidelity(meas1[i][1], meas2[i][1])
+        fidCC.append(sumC)
+        sumN += get_matched_fidelity(meas1[i][1], noisyMeas[i][1])
+        fidCN.append(sumN)
     data.update({"C2C": fidCC})
     data.update({"C2N": fidCN})
     return data
@@ -55,11 +52,11 @@ def modify_circuit(qbits, gate, depth, circuit):
     """
     newCirc = circuit.copy()
     numQ = circuit.num_qubits
-    
+
     for q in qbits:
         if q > numQ:
             raise ValueError("Qubits mismatch for given ciruit.")
-    
+
     insertCirc = QuantumCircuit(numQ)
     insertCirc.append(gate, qbits)
     ci_pos = 0
@@ -72,6 +69,5 @@ def modify_circuit(qbits, gate, depth, circuit):
         if qpos == depth:
             break
         ci_pos += 1
-        
     newCirc.data = circuit[:ci_pos] + insertCirc.data + circuit[ci_pos:]
     return newCirc

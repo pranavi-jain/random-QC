@@ -1,3 +1,4 @@
+import random
 from qiskit import transpile
 from qiskit.circuit.library import HGate, SdgGate
 
@@ -5,70 +6,95 @@ from qiskit.circuit.library import HGate, SdgGate
 outcomes (probability distributions) in an output object."""
 
 
+def get_standard_basis_list(runs, num_q):
+    basis_list = []
+    bases = ["X", "Y", "Z"]
+    for i in range(runs):
+        current_basis = bases[i % len(bases)]
+        basis_string = current_basis * num_q
+        basis_list.append(basis_string)
+    return basis_list
+
+
+def get_random_basis_list(runs, num_q):
+    """Utility function to get a list of random basis choice for circuit measurement
+
+    Returns:
+        basis_list: array of strings selected as basis choice for 'n' qubits
+    """
+    basis_list = []
+    basis = ""
+    for i in range(runs):
+        for q in range(num_q):
+            basis += random.choice(["X", "Y", "Z"])
+        basis_list.append(basis)
+        basis = ""
+    return basis_list
+
+
 class _MeasurementHelper:
     """Helper class containing all utility functions to perform measurements on circuit in three
     different basis X, Y, Z"""
-    
-    ## Parametrized constructor 
-    def __init__(self, noq, circuit, backend): 
-        self.num_q = noq 
-        self.circuit = circuit 
+
+    ## Parametrized constructor
+    def __init__(self, noq, circuit, backend):
+        self.num_q = noq
+        self.circuit = circuit
         self.backend = backend
 
-    ## Defining output object (for storing measurement outcomes) - dictionary with basis as keys
-    @staticmethod
-    def get_obj_inst():
-        keyList = ["X", "Y", "Z"]
-        obj = {}
-        for i in keyList:
-            obj[i] = None
-        return obj
-
     ## Circuit measurement on given backend service, and storing the output
-    def measure_circuit(self, circ, obj, basis):
-        circ.measure_all()
+    def measure_circuit(self, circuit):
+        circuit.measure_all()
         backend = self.backend
-        tqc = transpile(circ, backend)      ## Optional - can skip transpilation
+        tqc = transpile(circuit, backend)  ## Optional - can skip transpilation
         counts = backend.run(tqc).result().get_counts()
-        obj.update({basis:counts})
-        circ.remove_final_measurements()
+        return counts
 
     ## Measuring given circuit in X, Y, Z basis
-    def get_measurement_output(self):
-        obj = self.get_obj_inst() 
-        
-        # Measurement in X basis 
+    def get_measurement_output(self, basis):
         tempCirc = self.circuit.copy()
-        tempCirc.append(HGate(), [range(0, self.num_q)])
-        self.measure_circuit(tempCirc, obj, "X")
-        
-        # Measurement in Y basis
-        tempCirc = self.circuit.copy()
-        tempCirc.append(HGate(), [range(0, self.num_q)])
-        tempCirc.append(SdgGate(), [range(0, self.num_q)])
-        self.measure_circuit(tempCirc, obj, "Y")
-        
-        # # Measurement in Z basis
-        self.measure_circuit(self.circuit, obj, "Z")
-        return obj
+        tempCirc.barrier()
+
+        for q in range(len(basis)):
+            if basis[q] == "X":
+                tempCirc.h(q)
+
+            elif basis[q] == "Y":
+                tempCirc.sdg(q)
+                tempCirc.h(q)
+
+            elif basis[q] == "Z":
+                continue
+
+            else:
+                raise ValueError("Problem in given basis - " + basis)
+
+        return self.measure_circuit(tempCirc)
 
 
 """Utilty function called on the circuit to perform measurement and return the output object."""
 
-def get_circuit_output(circuit, runs, backend):
+
+def get_meas_output(circuit, backend, basis_list):
     """
     Args:
     circuit (QuantumCircuit): circuit on which to perform measurment
-    run (int): number of times measurement is performed
     backend (IBMBackendService): IBM backend service to be called
-    
-    The final object returned is a list of 'n' measurements run on the circuit."""
-    
+    basis_list (array): array of basis choice for which to perform measurement
+
+    The final object returned is a list of 'n' measurements run on the circuit in the given basis_list.
+    """
+
+    runs = len(basis_list)
     num_q = circuit.num_qubits
-    output = [dict() for x in range(runs)]
-    
+    output = [[None] * 2 for x in range(runs)]
+
     helperObj = _MeasurementHelper(num_q, circuit, backend)
-    for i in range(0, runs):
-        result = helperObj.get_measurement_output()
-        output[i] = result 
+    arr = [None] * 2
+    for i in range(runs):
+        result = helperObj.get_measurement_output(basis_list[i])
+        arr[0] = basis_list[i]
+        arr[1] = result
+        output[i] = arr
+        arr = [None] * 2
     return output
