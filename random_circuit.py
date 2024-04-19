@@ -4,19 +4,23 @@ from qiskit.circuit import Reset
 from qiskit.circuit.library import standard_gates
 from qiskit.circuit.exceptions import CircuitError
 
+"""This module contains utility functions for generating random circuits."""
 
-"""Specifying the list of gates as required"""
+
+"""Specifying the list of gates as required below"""
 
 # List of basic gates for IBM Eagle processor
-_eagle_gate_set_1q = [ 
-    # (Gate class, number of qubits, number of parameters)       
+_eagle_gate_set_1q = [
+    # (Gate class, number of qubits, number of parameters)
     (standard_gates.IGate, 1, 0),
     (standard_gates.SXGate, 1, 0),
     (standard_gates.XGate, 1, 0),
     (standard_gates.RZGate, 1, 1),
 ]
-_eagle_gate_set_2q = [(standard_gates.ECRGate, 2, 0),]
-eagle_gate_set = {"1q":_eagle_gate_set_1q, "2q":_eagle_gate_set_2q}
+_eagle_gate_set_2q = [
+    (standard_gates.ECRGate, 2, 0),
+]
+eagle_gate_set = {"1q": _eagle_gate_set_1q, "2q": _eagle_gate_set_2q}
 
 # List of basic universal/Pauli gates
 _basis_gate_set_1q = [
@@ -25,12 +29,18 @@ _basis_gate_set_1q = [
     (standard_gates.YGate, 1, 0),
     (standard_gates.ZGate, 1, 0),
 ]
-_basis_gate_set_2q = [    
+_basis_gate_set_2q = [
     (standard_gates.CXGate, 2, 0),
     (standard_gates.SwapGate, 2, 0),
 ]
-_basis_gate_set_3q = [(standard_gates.CCXGate, 3, 0),]
-basis_gate_set = {"1q":_basis_gate_set_1q, "2q":_basis_gate_set_2q, "3q":_basis_gate_set_3q}
+_basis_gate_set_3q = [
+    (standard_gates.CCXGate, 3, 0),
+]
+basis_gate_set = {
+    "1q": _basis_gate_set_1q,
+    "2q": _basis_gate_set_2q,
+    "3q": _basis_gate_set_3q,
+}
 
 # All the standard gates from Qiskit Library
 _gates_1q = [
@@ -91,7 +101,7 @@ _gates_4q = [
     (standard_gates.C3SXGate, 4, 0),
     (standard_gates.RC3XGate, 4, 0),
 ]
-standard_gate_set = {"1q":_gates_1q, "2q":_gates_2q, "3q":_gates_3q, "4q":_gates_4q}
+standard_gate_set = {"1q": _gates_1q, "2q": _gates_2q, "3q": _gates_3q, "4q": _gates_4q}
 
 
 # The code below is part of Qiskit.
@@ -106,11 +116,16 @@ standard_gate_set = {"1q":_gates_1q, "2q":_gates_2q, "3q":_gates_3q, "4q":_gates
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
-"""Utility functions for generating random circuits, given the number of qubits, 
-depth of circuit and specified set of gates."""
 
 def get_random_circuit(
-    num_qubits, depth, gate_set, max_operands=4, measure=False, conditional=False, reset=False, seed=None
+    num_qubits,
+    depth,
+    gate_set,
+    max_operands=4,
+    measure=False,
+    conditional=False,
+    reset=False,
+    seed=None,
 ):
     """Generate random circuit of arbitrary size and form, given the allowed set of gates.
 
@@ -162,7 +177,8 @@ def get_random_circuit(
     if max_operands >= 4 and gates_4q != None:
         gates.extend(gates_4q)
     gates = np.array(
-        gates, dtype=[("class", object), ("num_qubits", np.int64), ("num_params", np.int64)]
+        gates,
+        dtype=[("class", object), ("num_qubits", np.int64), ("num_params", np.int64)],
     )
     gates_1q = np.array(gates_1q, dtype=gates.dtype)
 
@@ -230,13 +246,25 @@ def get_random_circuit(
                     # The condition values are required to be bigints, not Numpy's fixed-width type.
                     operation = operation.c_if(cr, int(condition_values[c_ptr]))
                     c_ptr += 1
-                qc._append(CircuitInstruction(operation=operation, qubits=qubits[q_start:q_end]))
+                qc._append(
+                    CircuitInstruction(
+                        operation=operation, qubits=qubits[q_start:q_end]
+                    )
+                )
         else:
             for gate, q_start, q_end, p_start, p_end in zip(
-                gate_specs["class"], q_indices[:-1], q_indices[1:], p_indices[:-1], p_indices[1:]
+                gate_specs["class"],
+                q_indices[:-1],
+                q_indices[1:],
+                p_indices[:-1],
+                p_indices[1:],
             ):
                 operation = gate(*parameters[p_start:p_end])
-                qc._append(CircuitInstruction(operation=operation, qubits=qubits[q_start:q_end]))
+                qc._append(
+                    CircuitInstruction(
+                        operation=operation, qubits=qubits[q_start:q_end]
+                    )
+                )
 
     if measure:
         qc.measure(qc.qubits, cr)
