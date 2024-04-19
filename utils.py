@@ -2,11 +2,6 @@ from qiskit.circuit import QuantumCircuit
 from qiskit.quantum_info.analysis import hellinger_fidelity
 
 
-def get_matched_fidelity(op1, op2):
-    fidelity = hellinger_fidelity(op1, op2)
-    return fidelity
-
-
 def get_fidelity_data(meas1, meas2, noisyMeas):
     """Utility function to get fidelities between
         - the circuit and itself, and
@@ -29,9 +24,9 @@ def get_fidelity_data(meas1, meas2, noisyMeas):
     runs = len(meas1)
 
     for i in range(0, runs):
-        sumC += get_matched_fidelity(meas1[i][1], meas2[i][1])
+        sumC += hellinger_fidelity(meas1[i][1], meas2[i][1])
         fidCC.append(sumC)
-        sumN += get_matched_fidelity(meas1[i][1], noisyMeas[i][1])
+        sumN += hellinger_fidelity(meas1[i][1], noisyMeas[i][1])
         fidCN.append(sumN)
     data.update({"C2C": fidCC})
     data.update({"C2N": fidCN})
