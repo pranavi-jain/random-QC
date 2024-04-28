@@ -47,7 +47,8 @@ class _MeasurementHelper:
         circuit.measure_all()
         backend = self.backend
         tqc = transpile(circuit, backend)  ## Optional - can skip transpilation
-        counts = backend.run(tqc).result().get_counts()
+        job = backend.run(tqc, shots=1024)
+        counts = job.result().get_counts()
         return counts
 
     ## Measuring given circuit in X, Y, Z basis
