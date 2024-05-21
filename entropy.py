@@ -25,13 +25,17 @@ def get_entropy_list(meas):
     """
     entropy_list = {}
     runs = len(meas)
+    counter = {}
     for i in range(0, runs):
         entropy = _calculate_entropy(meas[i][1])
         basis = meas[i][0]
         if basis in entropy_list:
-            entropy_list[basis] += entropy
+            counter[basis] += 1
+            entropy_list[basis] += entropy//counter[basis]
         else:
             entropy_list[basis] = entropy
+            counter[basis] = 1
+        entropy = 0.0
 
     return entropy_list
 
