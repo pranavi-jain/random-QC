@@ -1,11 +1,12 @@
-# Analysis of Measurement Outcomes from Random Quantum Circuits
+# Analysis of Measurement Outcomes to Study Random Quantum Circuits
+![Python](https://img.shields.io/badge/python-2.8%2B-blue)
+![Qiskit](https://img.shields.io/badge/Qiskit-1.0.2-blue)
 
-**Authors:** Pranavi Jain, Dr Marcin Abram
+**Authors:** Pranavi Jain, Dr. Marcin Abram
 
 **Affiliation:** University of Southern California
 
-![Python](https://img.shields.io/badge/python-2.8%2B-blue)
-![Qiskit](https://img.shields.io/badge/Qiskit-1.0.2-blue)
+---
 
 ## Table of Contents
 
@@ -15,7 +16,7 @@
 
 ## Overview
 This repository contains a collection of Jupyter notebooks that delve into analyzing measurement outcomes of random quantum circuits. The main focus is investigating various properties and characteristics of random quantum circuits. One of the key objectives is to discern differences between an ideal quantum circuit and its "noisy" counterpart, with potential applications in quantum computing and error correction.
-<br/>
+
 This project uses Qiskit to generate and execute quantum circuits on IBM quantum hardware.
 
 ## Project Description
@@ -44,21 +45,32 @@ This project uses Qiskit to generate and execute quantum circuits on IBM quantum
 - Successfully generated ***random quantum circuits*** for given number of qubits, depth, and set of quantum gates. 
 <br/>
 Example of a random quantum circuit generated for N=4 and depth=5:
-![Random Circuit Example](/img/circuit.JPG)
 
-- Added ***arbitrary noise*** (here at position 3) to the circuit generated above: ![Random Circuit with Noise](/img/noise_circuit.JPG)
+  <img src="img/circuit.JPG" width="400px" />
+
+- Added ***arbitrary noise*** (here at position 3) to the circuit generated above:
+
+  <img src="img/noise_circuit.JPG" width="400px" />
 
 ### Fidelity Analysis
 1. **Fidelity Comparison of Result from Classical Tomography:**
-  ![Fidelity_Classical](/img/classical_tomo.JPG)
+
+  <img src="img/classical_tomo.JPG" width="500px" />
+
 2. **Fidelity Comparison of Result from Shadow Tomography:**
-  ![Fidelity_Shadow](/img/shadow_tomo.JPG)
+
+  <img src="img/shadow_tomo.JPG" width="500px" />
+
 
 ### Entropy Analysis
 1. **Entropy Trends for Quantum Circuits with Different Depth:**
-  ![Entropy_Trends](/img/entropy.JPG)
+
+  <img src="img/entropy.JPG" width="500px" />
+
 2. **Bar Graphs for Measurement Outcomes of Circuits with Highest Entropy:**
-  ![depth_10](/img/bar_graph.JPG)
-  ![depth_27](/img/bar_graph_27.JPG)
+
+  <img src="img/bar_graph.JPG" width="600px" />
+  <img src="img/bar_graph_27.JPG" width="600px" />
+
 
 ---
