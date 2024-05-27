@@ -42,9 +42,7 @@ This project uses Qiskit to generate and execute quantum circuits on IBM quantum
 ## Results
 
 ### Random Circuit Generation
-- Successfully generated ***random quantum circuits*** for given number of qubits, depth, and set of quantum gates. 
-<br/>
-Example of a random quantum circuit generated for N=4 and depth=5:
+- Successfully generated ***random quantum circuits*** for given number of qubits, depth, and set of quantum gates. Example of a random quantum circuit generated for **N=4** and **depth=5**:
 
   <img src="img/circuit.JPG" width="400px" />
 
@@ -53,11 +51,11 @@ Example of a random quantum circuit generated for N=4 and depth=5:
   <img src="img/noise_circuit.JPG" width="400px" />
 
 ### Fidelity Analysis
-1. **Fidelity Comparison of Result from Classical Tomography:**
+1. **Fidelity Comparison of Results from Classical Tomography:**
 
   <img src="img/classical_tomo.JPG" width="500px" />
 
-2. **Fidelity Comparison of Result from Shadow Tomography:**
+2. **Fidelity Comparison of Results from Shadow Tomography:**
 
   <img src="img/shadow_tomo.JPG" width="500px" />
 
@@ -71,6 +69,5 @@ Example of a random quantum circuit generated for N=4 and depth=5:
 
   <img src="img/bar_graph.JPG" width="600px" />
   <img src="img/bar_graph_27.JPG" width="600px" />
-
 
 ---
